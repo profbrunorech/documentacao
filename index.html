@@ -11,6 +11,8 @@
     .result-box { min-height: 80px; font-size: 1.5rem; }
     .method-card { height: 100%; }
     .method-card code { font-size: .9rem; }
+    .form-control[data-bs-toggle="tooltip"] { cursor: help; }
+    .hint-icon { color: #0d6efd; cursor: help; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -22,168 +24,241 @@
           Interface para todos os métodos de <code>CalculadoraCientifica</code>
         </p>
 
-        <div id="alerta" class="alert alert-danger d-none" role="alert"></div>
+        <!-- Abas -->
+        <ul class="nav nav-tabs mb-4" id="abas" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab-calc" data-bs-toggle="tab" data-bs-target="#painel-calc" type="button" role="tab" aria-controls="painel-calc" aria-selected="true">Calculadora</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-ajuda" data-bs-toggle="tab" data-bs-target="#painel-ajuda" type="button" role="tab" aria-controls="painel-ajuda" aria-selected="false">Como Utilizar o Sistema</button>
+          </li>
+        </ul>
 
-        <div class="card bg-light mb-4">
-          <div class="card-body">
-            <label for="resultado" class="form-label fw-bold">Resultado</label>
-            <div id="resultado" class="form-control result-box d-flex align-items-center">
-              —
-            </div>
-          </div>
-        </div>
+        <div class="tab-content">
 
-        <div class="row g-4">
+          <!-- ============ ABA: CALCULADORA ============ -->
+          <div class="tab-pane fade show active" id="painel-calc" role="tabpanel" aria-labelledby="tab-calc" tabindex="0">
 
-          <!-- Operações básicas -->
-          <div class="col-md-6">
-            <div class="card method-card">
-              <div class="card-header fw-bold">Operações básicas</div>
+            <div id="alerta" class="alert alert-danger d-none" role="alert"></div>
+
+            <div class="card bg-light mb-4">
               <div class="card-body">
-                <div class="mb-3">
-                  <label for="aBasico" class="form-label">Valor A</label>
-                  <input id="aBasico" type="number" step="any" class="form-control">
-                </div>
-                <div class="mb-3">
-                  <label for="bBasico" class="form-label">Valor B</label>
-                  <input id="bBasico" type="number" step="any" class="form-control">
-                </div>
-                <div class="d-grid gap-2 d-sm-flex">
-                  <button class="btn btn-primary flex-fill" onclick="executar(() => CalculadoraCientifica.somar(num('aBasico'), num('bBasico')))">Somar</button>
-                  <button class="btn btn-primary flex-fill" onclick="executar(() => CalculadoraCientifica.subtrair(num('aBasico'), num('bBasico')))">Subtrair</button>
-                  <button class="btn btn-primary flex-fill" onclick="executar(() => CalculadoraCientifica.multiplicar(num('aBasico'), num('bBasico')))">Multiplicar</button>
-                  <button class="btn btn-primary flex-fill" onclick="executar(() => CalculadoraCientifica.dividir(num('aBasico'), num('bBasico')))">Dividir</button>
+                <label for="resultado" class="form-label fw-bold">Resultado</label>
+                <div id="resultado" class="form-control result-box d-flex align-items-center">
+                  —
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Potência e raiz -->
-          <div class="col-md-6">
-            <div class="card method-card">
-              <div class="card-header fw-bold">Potência e raiz quadrada</div>
-              <div class="card-body">
-                <div class="mb-3">
-                  <label for="base" class="form-label">Base / número</label>
-                  <input id="base" type="number" step="any" class="form-control">
-                </div>
-                <div class="mb-3">
-                  <label for="expoente" class="form-label">Expoente</label>
-                  <input id="expoente" type="number" step="any" class="form-control">
-                </div>
-                <div class="d-grid gap-2 d-sm-flex">
-                  <button class="btn btn-success flex-fill" onclick="executar(() => CalculadoraCientifica.potencia(num('base'), num('expoente')))">Potência</button>
-                  <button class="btn btn-success flex-fill" onclick="executar(() => CalculadoraCientifica.raizQuadrada(num('base')))">Raiz quadrada</button>
-                </div>
-              </div>
-            </div>
-          </div>
+            <div class="row g-4">
 
-          <!-- Fatorial -->
-          <div class="col-md-6">
-            <div class="card method-card">
-              <div class="card-header fw-bold">Fatorial</div>
-              <div class="card-body">
-                <label for="fatorial" class="form-label">Número inteiro não negativo</label>
-                <input id="fatorial" type="number" step="1" class="form-control mb-3">
-                <button class="btn btn-warning w-100" onclick="executar(() => CalculadoraCientifica.fatorial(num('fatorial')))">
-                  Calcular fatorial
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Trigonometria -->
-          <div class="col-md-6">
-            <div class="card method-card">
-              <div class="card-header fw-bold">Trigonometria</div>
-              <div class="card-body">
-                <label for="graus" class="form-label">Ângulo em graus</label>
-                <input id="graus" type="number" step="any" class="form-control mb-3">
-                <div class="d-grid gap-2 d-sm-flex">
-                  <button class="btn btn-info flex-fill" onclick="executar(() => CalculadoraCientifica.seno(num('graus')))">Seno</button>
-                  <button class="btn btn-info flex-fill" onclick="executar(() => CalculadoraCientifica.cosseno(num('graus')))">Cosseno</button>
-                  <button class="btn btn-info flex-fill" onclick="executar(() => CalculadoraCientifica.tangente(num('graus')))">Tangente</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Logaritmos -->
-          <div class="col-md-6">
-            <div class="card method-card">
-              <div class="card-header fw-bold">Logaritmos</div>
-              <div class="card-body">
-                <div class="mb-3">
-                  <label for="numeroLog" class="form-label">Número</label>
-                  <input id="numeroLog" type="number" step="any" class="form-control">
-                </div>
-                <div class="mb-3">
-                  <label for="baseLog" class="form-label">Base do logaritmo</label>
-                  <input id="baseLog" type="number" step="any" value="10" class="form-control">
-                </div>
-                <div class="d-grid gap-2 d-sm-flex">
-                  <button class="btn btn-secondary flex-fill" onclick="executar(() => CalculadoraCientifica.logaritmo(num('numeroLog'), num('baseLog')))">Logaritmo</button>
-                  <button class="btn btn-secondary flex-fill" onclick="executar(() => CalculadoraCientifica.logaritmoNatural(num('numeroLog')))">Log natural (ln)</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Porcentagem -->
-          <div class="col-md-6">
-            <div class="card method-card">
-              <div class="card-header fw-bold">Porcentagem</div>
-              <div class="card-body">
-                <div class="mb-3">
-                  <label for="valor" class="form-label">Valor</label>
-                  <input id="valor" type="number" step="any" class="form-control">
-                </div>
-                <div class="mb-3">
-                  <label for="percentual" class="form-label">Percentual (%)</label>
-                  <input id="percentual" type="number" step="any" class="form-control">
-                </div>
-                <button class="btn btn-dark w-100" onclick="executar(() => CalculadoraCientifica.porcentagem(num('valor'), num('percentual')))">
-                  Calcular porcentagem
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Conversão -->
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header fw-bold">Conversão de graus para radianos</div>
-              <div class="card-body">
-                <div class="row g-3 align-items-end">
-                  <div class="col-md-9">
-                    <label for="grausRad" class="form-label">Graus</label>
-                    <input id="grausRad" type="number" step="any" class="form-control">
+              <!-- Operações básicas -->
+              <div class="col-md-6">
+                <div class="card method-card">
+                  <div class="card-header fw-bold">Operações básicas</div>
+                  <div class="card-body">
+                    <div class="mb-3">
+                      <label for="aBasico" class="form-label">Valor A</label>
+                      <input id="aBasico" type="number" step="any" class="form-control"
+                             data-bs-toggle="tooltip" data-bs-title="Apenas valores numéricos (positivos ou negativos).">
+                    </div>
+                    <div class="mb-3">
+                      <label for="bBasico" class="form-label">Valor B</label>
+                      <input id="bBasico" type="number" step="any" class="form-control"
+                             data-bs-toggle="tooltip" data-bs-title="Apenas valores numéricos. Na divisão, o valor B não pode ser zero.">
+                    </div>
+                    <div class="d-grid gap-2 d-sm-flex">
+                      <button class="btn btn-primary flex-fill" onclick="executar(() => CalculadoraCientifica.somar(num('aBasico'), num('bBasico')))">Somar</button>
+                      <button class="btn btn-primary flex-fill" onclick="executar(() => CalculadoraCientifica.subtrair(num('aBasico'), num('bBasico')))">Subtrair</button>
+                      <button class="btn btn-primary flex-fill" onclick="executar(() => CalculadoraCientifica.multiplicar(num('aBasico'), num('bBasico')))">Multiplicar</button>
+                      <button class="btn btn-primary flex-fill" onclick="executar(() => CalculadoraCientifica.dividir(num('aBasico'), num('bBasico')))">Dividir</button>
+                    </div>
                   </div>
-                  <div class="col-md-3">
-                    <button class="btn btn-outline-primary w-100" onclick="executar(() => CalculadoraCientifica._paraRadianos(num('grausRad')))">
-                      Converter
+                </div>
+              </div>
+
+              <!-- Potência e raiz -->
+              <div class="col-md-6">
+                <div class="card method-card">
+                  <div class="card-header fw-bold">Potência e raiz quadrada</div>
+                  <div class="card-body">
+                    <div class="mb-3">
+                      <label for="base" class="form-label">Base / número</label>
+                      <input id="base" type="number" step="any" class="form-control"
+                             data-bs-toggle="tooltip" data-bs-title="Apenas valores numéricos. Para raiz quadrada, use apenas números positivos (ou zero).">
+                    </div>
+                    <div class="mb-3">
+                      <label for="expoente" class="form-label">Expoente</label>
+                      <input id="expoente" type="number" step="any" class="form-control"
+                             data-bs-toggle="tooltip" data-bs-title="Apenas valores numéricos (positivos ou negativos). Usado somente na potência.">
+                    </div>
+                    <div class="d-grid gap-2 d-sm-flex">
+                      <button class="btn btn-success flex-fill" onclick="executar(() => CalculadoraCientifica.potencia(num('base'), num('expoente')))">Potência</button>
+                      <button class="btn btn-success flex-fill" onclick="executar(() => CalculadoraCientifica.raizQuadrada(num('base')))">Raiz quadrada</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Fatorial -->
+              <div class="col-md-6">
+                <div class="card method-card">
+                  <div class="card-header fw-bold">Fatorial</div>
+                  <div class="card-body">
+                    <label for="fatorial" class="form-label">Número inteiro não negativo</label>
+                    <input id="fatorial" type="number" step="1" class="form-control mb-3"
+                           data-bs-toggle="tooltip" data-bs-title="Apenas números inteiros positivos (ou zero). Não aceita decimais nem negativos.">
+                    <button class="btn btn-warning w-100" onclick="executar(() => CalculadoraCientifica.fatorial(num('fatorial')))">
+                      Calcular fatorial
                     </button>
                   </div>
                 </div>
-                <small class="text-muted d-block mt-2">
-                  O método é interno no objeto original, mas foi disponibilizado aqui para fins didáticos.
-                </small>
               </div>
+
+              <!-- Trigonometria -->
+              <div class="col-md-6">
+                <div class="card method-card">
+                  <div class="card-header fw-bold">Trigonometria</div>
+                  <div class="card-body">
+                    <label for="graus" class="form-label">Ângulo em graus</label>
+                    <input id="graus" type="number" step="any" class="form-control mb-3"
+                           data-bs-toggle="tooltip" data-bs-title="Apenas valores numéricos, em graus (positivos ou negativos).">
+                    <div class="d-grid gap-2 d-sm-flex">
+                      <button class="btn btn-info flex-fill" onclick="executar(() => CalculadoraCientifica.seno(num('graus')))">Seno</button>
+                      <button class="btn btn-info flex-fill" onclick="executar(() => CalculadoraCientifica.cosseno(num('graus')))">Cosseno</button>
+                      <button class="btn btn-info flex-fill" onclick="executar(() => CalculadoraCientifica.tangente(num('graus')))">Tangente</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Logaritmos -->
+              <div class="col-md-6">
+                <div class="card method-card">
+                  <div class="card-header fw-bold">Logaritmos</div>
+                  <div class="card-body">
+                    <div class="mb-3">
+                      <label for="numeroLog" class="form-label">Número</label>
+                      <input id="numeroLog" type="number" step="any" class="form-control"
+                             data-bs-toggle="tooltip" data-bs-title="Apenas números positivos (maiores que zero).">
+                    </div>
+                    <div class="mb-3">
+                      <label for="baseLog" class="form-label">Base do logaritmo</label>
+                      <input id="baseLog" type="number" step="any" value="10" class="form-control"
+                             data-bs-toggle="tooltip" data-bs-title="Apenas números positivos, diferentes de 1. Padrão: 10. Não é usada no log natural.">
+                    </div>
+                    <div class="d-grid gap-2 d-sm-flex">
+                      <button class="btn btn-secondary flex-fill" onclick="executar(() => CalculadoraCientifica.logaritmo(num('numeroLog'), num('baseLog')))">Logaritmo</button>
+                      <button class="btn btn-secondary flex-fill" onclick="executar(() => CalculadoraCientifica.logaritmoNatural(num('numeroLog')))">Log natural (ln)</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Porcentagem -->
+              <div class="col-md-6">
+                <div class="card method-card">
+                  <div class="card-header fw-bold">Porcentagem</div>
+                  <div class="card-body">
+                    <div class="mb-3">
+                      <label for="valor" class="form-label">Valor</label>
+                      <input id="valor" type="number" step="any" class="form-control"
+                             data-bs-toggle="tooltip" data-bs-title="Apenas valores numéricos.">
+                    </div>
+                    <div class="mb-3">
+                      <label for="percentual" class="form-label">Percentual (%)</label>
+                      <input id="percentual" type="number" step="any" class="form-control"
+                             data-bs-toggle="tooltip" data-bs-title="Apenas valores numéricos. Digite sem o símbolo %, por exemplo: 15.">
+                    </div>
+                    <button class="btn btn-dark w-100" onclick="executar(() => CalculadoraCientifica.porcentagem(num('valor'), num('percentual')))">
+                      Calcular porcentagem
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Conversão -->
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header fw-bold">Conversão de graus para radianos</div>
+                  <div class="card-body">
+                    <div class="row g-3 align-items-end">
+                      <div class="col-md-9">
+                        <label for="grausRad" class="form-label">Graus</label>
+                        <input id="grausRad" type="number" step="any" class="form-control"
+                               data-bs-toggle="tooltip" data-bs-title="Apenas valores numéricos, em graus (positivos ou negativos).">
+                      </div>
+                      <div class="col-md-3">
+                        <button class="btn btn-outline-primary w-100" onclick="executar(() => CalculadoraCientifica._paraRadianos(num('grausRad')))">
+                          Converter
+                        </button>
+                      </div>
+                    </div>
+                    <small class="text-muted d-block mt-2">
+                      O método é interno no objeto original, mas foi disponibilizado aqui para fins didáticos.
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="text-center mt-4">
+              <button class="btn btn-outline-secondary" onclick="limpar()">
+                Limpar resultados e campos
+              </button>
             </div>
           </div>
 
-        </div>
+          <!-- ============ ABA: COMO UTILIZAR ============ -->
+          <div class="tab-pane fade" id="painel-ajuda" role="tabpanel" aria-labelledby="tab-ajuda" tabindex="0">
+            <h2 class="h4 mb-3">Como Utilizar o Sistema</h2>
 
-        <div class="text-center mt-4">
-          <button class="btn btn-outline-secondary" onclick="limpar()">
-            Limpar resultados e campos
-          </button>
+            <h3 class="h5">Passo a passo</h3>
+            <ol class="mb-4">
+              <li>Na aba <strong>Calculadora</strong>, escolha o bloco da operação desejada.</li>
+              <li>Preencha os campos com valores numéricos. Passe o mouse (ou toque) sobre um campo para ver a dica de preenchimento.</li>
+              <li>Clique no botão da operação. O resultado aparece na caixa <strong>Resultado</strong>, no topo.</li>
+              <li>Se houver algum problema, uma mensagem vermelha explica o erro e o resultado mostra <em>Erro</em>.</li>
+              <li>Use <strong>Limpar resultados e campos</strong> para recomeçar (a base do logaritmo volta para 10).</li>
+            </ol>
+
+            <h3 class="h5">Operações e restrições</h3>
+            <div class="table-responsive mb-4">
+              <table class="table table-bordered table-sm align-middle">
+                <thead class="table-light">
+                  <tr><th>Operação</th><th>Campos usados</th><th>Restrição</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Somar, subtrair, multiplicar</td><td>Valor A e B</td><td>Apenas valores numéricos.</td></tr>
+                  <tr><td>Dividir</td><td>Valor A e B</td><td>B não pode ser zero.</td></tr>
+                  <tr><td>Potência</td><td>Base e Expoente</td><td>Apenas valores numéricos.</td></tr>
+                  <tr><td>Raiz quadrada</td><td>Base / número</td><td>Apenas números positivos ou zero.</td></tr>
+                  <tr><td>Fatorial</td><td>Número inteiro</td><td>Apenas inteiros positivos ou zero (sem decimais).</td></tr>
+                  <tr><td>Seno, cosseno, tangente</td><td>Ângulo em graus</td><td>Apenas valores numéricos, em graus.</td></tr>
+                  <tr><td>Logaritmo</td><td>Número e Base</td><td>Número maior que zero; base positiva e diferente de 1.</td></tr>
+                  <tr><td>Log natural (ln)</td><td>Número</td><td>Número maior que zero.</td></tr>
+                  <tr><td>Porcentagem</td><td>Valor e Percentual</td><td>Apenas valores numéricos, sem o símbolo %.</td></tr>
+                  <tr><td>Graus para radianos</td><td>Graus</td><td>Apenas valores numéricos.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="h5">Dicas</h3>
+            <ul>
+              <li>Use ponto ou vírgula como separador decimal, conforme o navegador aceitar (ex.: 2.5).</li>
+              <li>Campos vazios geram o aviso "Informe um valor numérico válido."</li>
+              <li>Os resultados são exibidos no formato brasileiro, com até 12 casas decimais.</li>
+              <li>Na tangente, ângulos como 90° resultam em valores muito grandes, pois a função tende ao infinito.</li>
+            </ul>
+          </div>
+
         </div>
       </div>
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     // Código original fornecido pelo usuário.
     const CalculadoraCientifica = {
@@ -303,6 +378,11 @@
       document.getElementById("alerta").classList.add("d-none");
       document.getElementById("alerta").textContent = "";
     }
+
+    // Inicializa os tooltips do Bootstrap (exibidos ao passar o mouse ou focar no campo).
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
+      new bootstrap.Tooltip(el, { trigger: "hover focus", placement: "top" });
+    });
   </script>
 </body>
 </html>
